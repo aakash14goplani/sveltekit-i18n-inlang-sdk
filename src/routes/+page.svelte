@@ -3,34 +3,28 @@
   import type { PageData } from './$types';
   import { onMount } from 'svelte';
 
-	export let data: PageData;
-
-  $: console.log(1, data);
-	$: console.log(2, data.language);
+  let selected = 'en';
 
   onMount(() => {
-    localStorage.set('language', 'en');
+    const valueFromStorage = localStorage.getItem('language') || 'en';
+    selected = valueFromStorage;
+    localStorage.setItem('language', valueFromStorage);
   })
 </script>
 
 <div class="container">
-  {#each languages as lang}
-	  <button on:click={() =>switchLanguage(lang)}>{lang}</button>
-  {/each}
-
-  <h1>jj{i("heading")}</h1>
-  <!-- <div class="container__title">
-    <h1>{$_('heading')}</h1>
+  <div class="container__title">
+    <h1>{i('heading')}</h1>
   </div>
   <div class="container__toggle">
-    <span>{$_('toggle_label')}: </span>
-    <select {value} on:change={handleLocaleChange}>
-      <option value="en" selected>English</option>
-      <option value="hi">Hindi</option>
-      <option value="fr">French</option>
+    <span>{i('toggle_label')}: </span>
+    <select bind:value={selected} on:change={() => switchLanguage(selected)}>
+      {#each languages as lang}
+        <option value="{lang}" selected>{lang.toUpperCase()}</option>
+      {/each}
     </select>
   </div>
-  <div class="container__content">
+  <!-- <div class="container__content">
     <p>{$_('body_text', {
       values: {
         download: $number(30242),
