@@ -4,6 +4,7 @@
   import { onMount } from 'svelte';
 
   let selected = 'en';
+  let randomNumber = 0;
 
   onMount(() => {
     const valueFromStorage = localStorage.getItem('language') || 'en';
@@ -20,7 +21,7 @@
     <span>{i('toggle_label')}: </span>
     <select bind:value={selected} on:change={() => switchLanguage(selected)}>
       {#each languages as lang}
-        <option value="{lang}" selected>{lang.toUpperCase()}</option>
+        <option value="{lang}">{lang.toUpperCase()}</option>
       {/each}
     </select>
   </div>
