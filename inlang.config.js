@@ -8,22 +8,23 @@ export async function defineConfig(env) {
 	const { default: sdkPlugin } = await env.$import(
 		'https://cdn.jsdelivr.net/npm/@inlang/sdk-js-plugin@0.9.1/dist/index.js'
 	);
-	const { default: typesafeI18nPlugin } = await env.$import(
-		'https://cdn.jsdelivr.net/gh/ivanhofer/inlang-plugin-typesafe-i18n@2/dist/index.js'
+	const { default: standardLintRules } = await env.$import(
+		'https://cdn.jsdelivr.net/npm/@inlang/plugin-standard-lint-rules@3/dist/index.js'
 	);
 
 	return {
 		referenceLanguage: 'en',
 		plugins: [
 			jsonPlugin({
-				pathPattern: './languages/{language}.json'
+				pathPattern: './languages/{language}.json',
+				variableReferencePattern: ['{', '}']
 			}),
 			sdkPlugin({
 				languageNegotiation: {
 					strategies: [{ type: 'localStorage' }]
 				}
 			}),
-			typesafeI18nPlugin()
+			standardLintRules()
 		]
 	};
 }

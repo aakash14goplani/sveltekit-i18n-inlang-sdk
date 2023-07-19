@@ -11,6 +11,35 @@
     selected = valueFromStorage;
     localStorage.setItem('language', valueFromStorage);
   })
+
+  function getCurrencyCode(): string {
+    switch (language) {
+      case 'en':
+        return 'USD';
+      case 'hi':
+        return 'INR';
+      case 'fr':
+        return 'EUR';
+      default:
+        return 'USD';
+    }
+  }
+
+  function dateFormatter(value: Date | number | string) {
+    return new Intl.DateTimeFormat(language, { year: "numeric", month: "long", day: "numeric" }).format(value);
+  }
+
+  function timeFormatter(value: Date | number | string) {
+    return new Intl.DateTimeFormat(language, { hour: 'numeric', minute: 'numeric' }).format(value);
+  }
+
+  function numberFormatter(value: number) {
+    return new Intl.NumberFormat(language).format(value);
+  }
+
+  function currencyFormatter(value: number) {
+    return new Intl.NumberFormat(language, { style: 'currency', currency: getCurrencyCode() }).format(value);
+  }
 </script>
 
 <div class="container">
@@ -26,21 +55,21 @@
     </select>
   </div>
   <div class="container__content">
-    <p>{i('body_text', { download: 16711, date: new Date(2023, 6, 14, 0, 0, 0, 0) })}</p>
+    <p>{i('body_text', { download: numberFormatter(802), date: dateFormatter(new Date(2023, 6, 14, 0, 0, 0, 0)) })}</p>
 
     <div class="container__content__plural">
       <div class="container__content__plural__buttons">
-        <button class:active={randomNumber === 0} on:click={() => randomNumber = 0}>0</button>
-        <button class:active={randomNumber === 1} on:click={() => randomNumber = 1}>1</button>
-        <button class:active={randomNumber === 2} on:click={() => randomNumber = 2}>2</button>
+        <button class:active={randomNumber === 0} on:click={() => randomNumber = 0}>{numberFormatter(0)}</button>
+        <button class:active={randomNumber === 1} on:click={() => randomNumber = 1}>{numberFormatter(1)}</button>
+        <button class:active={randomNumber === 2} on:click={() => randomNumber = 2}>{numberFormatter(2)}</button>
       </div>
-      <span>{i('awards', { values: { n: randomNumber } })}</span>
+      <span>{i('awards', { value: numberFormatter(randomNumber) })}</span>
     </div>
 
     <div class="container__content__formatter">
-      <span><strong>Time: </strong>{i('time', { value: new Date() })}</span>
-      <span><strong>Date: </strong>{i('date', { value: new Date() })}</span>
-      <span><strong>Currency: </strong>{i('currency', { value: 16711 })}</span>
+      <span><strong>Time: </strong>{i('time', { value: timeFormatter(new Date()) })}</span>
+      <span><strong>Date: </strong>{i('date', { value: dateFormatter(new Date()) })}</span>
+      <span><strong>Currency: </strong>{i('currency', { value: currencyFormatter(802) })}</span>
     </div>
   </div>
 </div>
